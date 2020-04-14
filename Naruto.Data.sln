@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1B0DDFB3-C3CB-4A1C-95C6-387ED9D82EDA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C6FBB32F-F8F9-4BEE-8E1D-5F7E641AB765}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.BaseMongo.Model", "src\Naruto.BaseMongo.Model\Naruto.BaseMongo.Model.csproj", "{A07C05F8-31A5-4F19-A82E-FB30791BE585}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.BaseRepository.Model", "src\Naruto.BaseRepository.Model\Naruto.BaseRepository.Model.csproj", "{9FF25DE8-AB79-4270-AA51-0B5F05DC9455}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.MongoDB", "src\Naruto.MongoDB\Naruto.MongoDB.csproj", "{A7DF0598-9651-4505-B843-34C77742ED57}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.Redis", "src\Naruto.Redis\Naruto.Redis.csproj", "{70162AC7-03D3-434B-B7F3-E8CD31728C8D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Naruto.Repository", "src\Naruto.Repository\Naruto.Repository.csproj", "{3AD60B63-E4F5-4331-989E-8E7C49AB6962}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestProject1", "test\XUnitTestProject1\XUnitTestProject1.csproj", "{0CFA8B6A-9919-40C7-9CF5-D44A3A78B888}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A07C05F8-31A5-4F19-A82E-FB30791BE585}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A07C05F8-31A5-4F19-A82E-FB30791BE585}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A07C05F8-31A5-4F19-A82E-FB30791BE585}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A07C05F8-31A5-4F19-A82E-FB30791BE585}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FF25DE8-AB79-4270-AA51-0B5F05DC9455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FF25DE8-AB79-4270-AA51-0B5F05DC9455}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FF25DE8-AB79-4270-AA51-0B5F05DC9455}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FF25DE8-AB79-4270-AA51-0B5F05DC9455}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7DF0598-9651-4505-B843-34C77742ED57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7DF0598-9651-4505-B843-34C77742ED57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7DF0598-9651-4505-B843-34C77742ED57}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7DF0598-9651-4505-B843-34C77742ED57}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70162AC7-03D3-434B-B7F3-E8CD31728C8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70162AC7-03D3-434B-B7F3-E8CD31728C8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70162AC7-03D3-434B-B7F3-E8CD31728C8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70162AC7-03D3-434B-B7F3-E8CD31728C8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AD60B63-E4F5-4331-989E-8E7C49AB6962}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AD60B63-E4F5-4331-989E-8E7C49AB6962}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AD60B63-E4F5-4331-989E-8E7C49AB6962}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AD60B63-E4F5-4331-989E-8E7C49AB6962}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CFA8B6A-9919-40C7-9CF5-D44A3A78B888}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CFA8B6A-9919-40C7-9CF5-D44A3A78B888}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CFA8B6A-9919-40C7-9CF5-D44A3A78B888}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CFA8B6A-9919-40C7-9CF5-D44A3A78B888}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A07C05F8-31A5-4F19-A82E-FB30791BE585} = {1B0DDFB3-C3CB-4A1C-95C6-387ED9D82EDA}
+		{9FF25DE8-AB79-4270-AA51-0B5F05DC9455} = {1B0DDFB3-C3CB-4A1C-95C6-387ED9D82EDA}
+		{A7DF0598-9651-4505-B843-34C77742ED57} = {1B0DDFB3-C3CB-4A1C-95C6-387ED9D82EDA}
+		{70162AC7-03D3-434B-B7F3-E8CD31728C8D} = {1B0DDFB3-C3CB-4A1C-95C6-387ED9D82EDA}
+		{3AD60B63-E4F5-4331-989E-8E7C49AB6962} = {1B0DDFB3-C3CB-4A1C-95C6-387ED9D82EDA}
+		{0CFA8B6A-9919-40C7-9CF5-D44A3A78B888} = {C6FBB32F-F8F9-4BEE-8E1D-5F7E641AB765}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {217C31D7-591E-4F24-99FC-BF9FD05E9372}
+	EndGlobalSection
+EndGlobal
