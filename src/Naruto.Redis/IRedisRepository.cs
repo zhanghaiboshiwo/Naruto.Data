@@ -17,52 +17,52 @@ namespace Naruto.Redis
         /// hash操作
         /// </summary>
         /// <returns></returns>
-        IRedisHash Hash();
+        IRedisHash Hash { get; }
 
         /// <summary>
         /// rediskey的操作
         /// </summary>
         /// <returns></returns>
-        IRedisKey Key();
+        IRedisKey Key { get;  }
 
         /// <summary>
         /// list操作
         /// </summary>
         /// <returns></returns>
-        IRedisList List();
+        IRedisList List { get; }
 
         /// <summary>
         /// set的操作
         /// </summary>
         /// <returns></returns>
-        IRedisSet Set();
+        IRedisSet Set { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        IRedisSortedSet SortedSet();
+        IRedisSortedSet SortedSet { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        IRedisStore Store();
+        IRedisStore Store { get;  }
         /// <summary>
         /// string 操作
         /// </summary>
         /// <returns></returns>
-        IRedisString String();
+        IRedisString String { get;  }
         /// <summary>
         /// 发布订阅
         /// </summary>
         /// <returns></returns>
-        IRedisSubscribe Subscribe();
+        IRedisSubscribe Subscribe { get;  }
 
         /// <summary>
         /// 锁
         /// </summary>
         /// <returns></returns>
-        IRedisLock Lock();
+        IRedisLock Lock { get;}
     }
 }
