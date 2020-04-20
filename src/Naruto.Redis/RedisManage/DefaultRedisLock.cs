@@ -1,4 +1,6 @@
-﻿using Naruto.Redis.IRedisManage;
+﻿using Microsoft.Extensions.Options;
+using Naruto.Redis.IRedisManage;
+using Naruto.Redis.RedisConfig;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -16,13 +18,15 @@ namespace Naruto.Redis.RedisManage
         /// <summary>
         /// 锁的前缀
         /// </summary>
-        private readonly string LockPrefix = "lock:";
+        private readonly string LockPrefix;
 
         private readonly IRedisBase redisBase;
 
-        public DefaultRedisLock(IRedisBase _redisBase)
+        public DefaultRedisLock(IRedisBase _redisBase, IOptions<RedisOptions> options)
         {
             redisBase = _redisBase;
+            //初始化key的前缀
+            LockPrefix = options.Value.RedisPrefix.LockPrefixKey;
         }
 
 

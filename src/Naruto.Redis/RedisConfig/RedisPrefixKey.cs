@@ -29,5 +29,9 @@ namespace Naruto.Redis.RedisConfig
         /// 有序集合的前缀  (默认sortedset:)
         /// </summary>
         public string SortedSetKey { get; set; } = "sortedset:";
+        /// <summary>
+        /// 锁的前缀key
+        /// </summary>
+        public string LockPrefixKey { get; set; } = "lock:";
     }
 }
