@@ -67,5 +67,65 @@ namespace Naruto.Redis.IRedisManage
         List<T> GetByIds<T>(List<int> ids);
 
         #endregion
+
+        #region database
+
+        #region Store
+
+        /// <summary>
+        /// 保存一个集合 （事务）
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        bool StoreAll<T>(int dataBase, List<T> list);
+
+        /// <summary>
+        /// 保存单个对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"></param>
+        bool Store<T>(int dataBase, T info);
+        /// <summary>
+        /// 删除所有的
+        /// </summary>
+        bool DeleteAll<T>(int dataBase);
+
+        /// <summary>
+        /// 移除 单个的集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        bool DeleteById<T>(int dataBase, string id);
+        /// <summary>
+        /// 移除 多个的集合
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        bool DeleteByIds<T>(int dataBase, List<string> ids);
+        /// <summary>
+        /// 获取所有的集合数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        List<T> GetAll<T>(int dataBase);
+
+        /// <summary>
+        /// 获取单个的
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        T GetById<T>(int dataBase, int id);
+        /// <summary>
+        /// 获取多个的
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        List<T> GetByIds<T>(int dataBase, List<int> ids);
+
+        #endregion
+
+        #endregion
     }
 }

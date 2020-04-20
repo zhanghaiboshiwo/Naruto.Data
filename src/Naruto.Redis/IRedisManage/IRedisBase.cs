@@ -10,10 +10,11 @@ namespace Naruto.Redis.IRedisManage
     /// </summary>
     public interface IRedisBase : IRedisDependency
     {
+
         /// <summary>
-        /// 访问存储库
+        /// 默认的存储库
         /// </summary>
-        IDatabase redisDataBase { get; }
+        int DefaultDataBase { get; }
         /// <summary>
         /// 实例连接
         /// </summary>
@@ -24,12 +25,12 @@ namespace Naruto.Redis.IRedisManage
         /// <typeparam name="TResult"></typeparam>
         /// <param name="action"></param>
         /// <returns></returns>
-        TResult DoSave<TResult>(Func<IDatabase, TResult> action);
+        TResult DoSave<TResult>(Func<IDatabase, TResult> action, int dataBase);
         /// <summary>
         /// 保存 无返回值的
         /// </summary>
         /// <param name="action"></param>
-        void DoSave(Action<IDatabase> action);
+        void DoSave(Action<IDatabase> action, int dataBase);
         /// <summary>
         /// 序列化
         /// </summary>

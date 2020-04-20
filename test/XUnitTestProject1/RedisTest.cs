@@ -40,12 +40,12 @@ namespace Naruto.XUnitTest
         public async Task Lock()
         {
             {
-                var res = await redis.Lock().LockAsync("hai", "1", TimeSpan.FromMinutes(10));
-                res = await redis.Lock().LockAsync("hai", "1", TimeSpan.FromMinutes(10));
-                res = await redis.Lock().LockAsync("hai", "122", TimeSpan.FromMinutes(120));
-                res = await redis.Lock().ReleaseAsync("hai", "1222");
+                var res = await redis.Lock.LockAsync("hai", "1", TimeSpan.FromMinutes(10));
+                res = await redis.Lock.LockAsync("hai", "1", TimeSpan.FromMinutes(10));
+                res = await redis.Lock.LockAsync("hai", "122", TimeSpan.FromMinutes(120));
+                res = await redis.Lock.ReleaseAsync("hai", "1222");
 
-                res = await redis.Lock().ReleaseAsync("hai", "1");
+                res = await redis.Lock.ReleaseAsync("hai", "1");
             }
 
 
@@ -54,9 +54,9 @@ namespace Naruto.XUnitTest
         //[Fact]
         //public async Task LockWait()
         //{
-        //    await redis.Lock().LockAsync("ceshi", TimeSpan.FromSeconds(180));
+        //    await redis.Lock.LockAsync("ceshi", TimeSpan.FromSeconds(180));
 
-        //    await redis.Lock()("ceshi", TimeSpan.FromSeconds(180), TimeSpan.FromMilliseconds(300));
+        //    await redis.Lock("ceshi", TimeSpan.FromSeconds(180), TimeSpan.FromMilliseconds(300));
         //}
 
 
@@ -78,49 +78,49 @@ namespace Naruto.XUnitTest
             }
 
             var redisbase = services.BuildServiceProvider().GetService<IRedisRepository>();
-            res = redisbase.String().Increment("test");
+            res = redisbase.String.Increment("test");
             for (int i = 0; i < 10; i++)
             {
-                res = redisbase.String().Increment("test");
+                res = redisbase.String.Increment("test");
             }
             for (int i = 0; i < 10; i++)
             {
-                res = redisbase.String().Decrement("test");
+                res = redisbase.String.Decrement("test");
             }
             Console.WriteLine("1");
         }
-        [Fact]
-        public async Task Publish()
-        {
-            var path = Path.GetTempPath();
-            var redis = ConnectionMultiplexer.Connect("127.0.0.1");
-            ISubscriber subscriber = redis.GetSubscriber();
-            Parallel.For(0, 1000, async item =>
-            {
-                //发布
-                await subscriber.PublishAsync("push", item.ToString());
-            });
+        //[Fact]
+        //public async Task Publish()
+        //{
+        //    var path = Path.GetTempPath();
+        //    var redis = ConnectionMultiplexer.Connect("127.0.0.1");
+        //    ISubscriber subscriber = redis.GetSubscriber();
+        //    Parallel.For(0, 1000, async item =>
+        //    {
+        //        //发布
+        //        await subscriber.PublishAsync("push", item.ToString);
+        //    });
 
-        }
+        //}
         [Fact]
         public async Task RedisTest1()
         {
 
             ConcurrentQueue<setting> settings1 = new ConcurrentQueue<setting>();
 
-            Parallel.For(0, 1000000, (item) =>
+            Parallel.For(0, 1000, (item) =>
             {
                 settings1.Enqueue(new setting() { Contact = "1", Description = "1", DuringTime = "1", Integral = 1, Rule = "1" });
             });
 
-            await redis.List().AddAsync<setting>("test", settings1.ToList());
+            await redis.List.AddAsync<setting>(1,"test", settings1.ToList());
         }
 
         [Fact]
         public async Task Pub()
         {
 
-            await redis.Subscribe().SubscribeAsync("test", (msg, value) =>
+            await redis.Subscribe.SubscribeAsync("test", (msg, value) =>
              {
                  Console.WriteLine(value);
              });
@@ -134,8 +134,8 @@ namespace Naruto.XUnitTest
                 using (var servicesscope = services.BuildServiceProvider().CreateScope())
                 {
                     var redis = servicesscope.ServiceProvider.GetRequiredService<IRedisRepository>();
-                    await redis.String().AddAsync("1", "1");
-                    await redis.String().GetAsync("1");
+                    await redis.String.AddAsync(1,"1", "1");
+                    await redis.String.GetAsync(1,"1");
                 }
             }
 
@@ -144,7 +144,7 @@ namespace Naruto.XUnitTest
         [Fact]
         public void Store()
         {
-            redis.Store().Store(new setting() { Description = "1" });
+            redis.Store.Store(1,new setting() { Description = "1" });
             //List<setting> list = new List<setting>();
             //for (int i = 0; i < 100000; i++)
             //{
@@ -156,7 +156,7 @@ namespace Naruto.XUnitTest
         [Fact]
         public void Remove()
         {
-            redis.Key().Remove(new List<string>() { "test2", "zhang" });
+            redis.Key.Remove(new List<string>() { "test2", "zhang" });
         }
     }
 }

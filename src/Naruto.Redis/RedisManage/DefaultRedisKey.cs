@@ -30,7 +30,46 @@ namespace Naruto.Redis.RedisManage
         /// 移除key
         /// </summary>
         /// <param name="key"></param>
-        public void Remove(string key, KeyOperatorEnum keyOperatorEnum = default)
+        public void Remove(string key, KeyOperatorEnum keyOperatorEnum = default) => Remove(redisBase.DefaultDataBase, key, keyOperatorEnum);
+
+        /// <summary>
+        /// 移除key
+        /// </summary>
+        /// <param name="key"></param>
+        public void Remove(List<string> key, KeyOperatorEnum keyOperatorEnum = default) => Remove(redisBase.DefaultDataBase, key, keyOperatorEnum);
+        /// <summary>
+        /// 判断key是否存在
+        /// </summary>
+        /// <param name="key"></param>
+        public bool Exists(string key, KeyOperatorEnum keyOperatorEnum = default) => Exists(redisBase.DefaultDataBase, key, keyOperatorEnum);
+        #endregion
+
+        #region 异步
+        /// <summary>
+        /// 移除key
+        /// </summary>
+        /// <param name="key"></param>
+        public async Task<bool> RemoveAsync(string key, KeyOperatorEnum keyOperatorEnum = default) => await RemoveAsync(redisBase.DefaultDataBase, key, keyOperatorEnum);
+        /// <summary>
+        /// 移除key
+        /// </summary>
+        /// <param name="key"></param>
+        public async Task<long> RemoveAsync(List<string> key, KeyOperatorEnum keyOperatorEnum = default) => await RemoveAsync(redisBase.DefaultDataBase, key, keyOperatorEnum);
+        /// <summary>
+        /// 判断key是否存在
+        /// </summary>
+        /// <param name="key"></param>
+        public async Task<bool> ExistsAsync(string key, KeyOperatorEnum keyOperatorEnum = default) => await ExistsAsync(redisBase.DefaultDataBase, key, keyOperatorEnum);
+        #endregion
+
+        #region database
+
+        #region 同步
+        /// <summary>
+        /// 移除key
+        /// </summary>
+        /// <param name="key"></param>
+        public void Remove(int dataBase, string key, KeyOperatorEnum keyOperatorEnum = default)
         {
             if (keyOperatorEnum == KeyOperatorEnum.String)
                 key = redisPrefixKey.StringPrefixKey + key;
@@ -42,14 +81,14 @@ namespace Naruto.Redis.RedisManage
                 key = redisPrefixKey.HashPrefixKey + key;
             else if (keyOperatorEnum == KeyOperatorEnum.SortedSet)
                 key = redisPrefixKey.SortedSetKey + key;
-            redisBase.DoSave(db => db.KeyDelete(key));
+            redisBase.DoSave(db => db.KeyDelete(key), dataBase);
         }
 
         /// <summary>
         /// 移除key
         /// </summary>
         /// <param name="key"></param>
-        public void Remove(List<string> key, KeyOperatorEnum keyOperatorEnum = default)
+        public void Remove(int dataBase, List<string> key, KeyOperatorEnum keyOperatorEnum = default)
         {
             if (key == null || key.Count() <= 0)
             {
@@ -61,16 +100,16 @@ namespace Naruto.Redis.RedisManage
                 item = GetKey(item, keyOperatorEnum);
                 removeList.Add(item);
             });
-            redisBase.DoSave(db => db.KeyDelete(redisBase.ConvertRedisKeys(removeList)));
+            redisBase.DoSave(db => db.KeyDelete(redisBase.ConvertRedisKeys(removeList)), dataBase);
         }
         /// <summary>
         /// 判断key是否存在
         /// </summary>
         /// <param name="key"></param>
-        public bool Exists(string key, KeyOperatorEnum keyOperatorEnum = default)
+        public bool Exists(int dataBase, string key, KeyOperatorEnum keyOperatorEnum = default)
         {
             key = GetKey(key, keyOperatorEnum);
-            return redisBase.DoSave(db => db.KeyExists(key));
+            return redisBase.DoSave(db => db.KeyExists(key), dataBase);
         }
         #endregion
 
@@ -79,16 +118,16 @@ namespace Naruto.Redis.RedisManage
         /// 移除key
         /// </summary>
         /// <param name="key"></param>
-        public async Task<bool> RemoveAsync(string key, KeyOperatorEnum keyOperatorEnum = default)
+        public async Task<bool> RemoveAsync(int dataBase, string key, KeyOperatorEnum keyOperatorEnum = default)
         {
             key = GetKey(key, keyOperatorEnum);
-            return await redisBase.DoSave(db => db.KeyDeleteAsync(key)).ConfigureAwait(false);
+            return await redisBase.DoSave(db => db.KeyDeleteAsync(key), dataBase).ConfigureAwait(false);
         }
         /// <summary>
         /// 移除key
         /// </summary>
         /// <param name="key"></param>
-        public async Task<long> RemoveAsync(List<string> key, KeyOperatorEnum keyOperatorEnum = default)
+        public async Task<long> RemoveAsync(int dataBase, List<string> key, KeyOperatorEnum keyOperatorEnum = default)
         {
             if (key == null || key.Count() <= 0)
             {
@@ -101,17 +140,19 @@ namespace Naruto.Redis.RedisManage
                 item = GetKey(item, keyOperatorEnum);
                 removeList.Add(item);
             });
-            return await redisBase.DoSave(db => db.KeyDeleteAsync(redisBase.ConvertRedisKeys(removeList))).ConfigureAwait(false);
+            return await redisBase.DoSave(db => db.KeyDeleteAsync(redisBase.ConvertRedisKeys(removeList)), dataBase).ConfigureAwait(false);
         }
         /// <summary>
         /// 判断key是否存在
         /// </summary>
         /// <param name="key"></param>
-        public async Task<bool> ExistsAsync(string key, KeyOperatorEnum keyOperatorEnum = default)
+        public async Task<bool> ExistsAsync(int dataBase, string key, KeyOperatorEnum keyOperatorEnum = default)
         {
             key = GetKey(key, keyOperatorEnum);
-            return await redisBase.DoSave(db => db.KeyExistsAsync(key)).ConfigureAwait(false);
+            return await redisBase.DoSave(db => db.KeyExistsAsync(key), dataBase).ConfigureAwait(false);
         }
+        #endregion
+
         #endregion
 
         /// <summary>

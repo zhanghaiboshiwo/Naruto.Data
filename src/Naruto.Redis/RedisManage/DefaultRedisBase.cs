@@ -22,12 +22,9 @@ namespace Naruto.Redis.RedisManage
         {
             redisConnectionHelp = _redisConnectionHelp;
         }
-        public IDatabase redisDataBase
+        private IDatabase redisDataBase(int dataBase)
         {
-            get
-            {
-                return redisConnectionHelp.RedisConnection.GetDatabase();
-            }
+            return redisConnectionHelp.RedisConnection.GetDatabase(dataBase);
         }
         public ConnectionMultiplexer RedisConnection
         {
@@ -36,25 +33,31 @@ namespace Naruto.Redis.RedisManage
                 return redisConnectionHelp.RedisConnection;
             }
         }
-
+        /// <summary>
+        /// 默认的存储库
+        /// </summary>
+        public int DefaultDataBase
+        {
+            get { return redisConnectionHelp.RedisDefaultDataBase; }
+        }
         /// <summary>
         /// 执行缓存库保存
         /// </summary>
         /// <typeparam name="TResult">返回结果</typeparam>
         /// <param name="action"></param>
         /// <returns></returns>
-        public TResult DoSave<TResult>(Func<IDatabase, TResult> action)
+        public TResult DoSave<TResult>(Func<IDatabase, TResult> action, int dataBase)
         {
-            return action(redisDataBase);
+            return action(redisDataBase(dataBase));
         }
         /// <summary>
         /// 执行缓存库保存 无返回值
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public void DoSave(Action<IDatabase> action)
+        public void DoSave(Action<IDatabase> action, int dataBase)
         {
-            action(redisDataBase);
+            action(redisDataBase(dataBase));
         }
         /// <summary>
         /// 序列化

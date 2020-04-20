@@ -76,5 +76,72 @@ namespace Naruto.Redis.IRedisManage
         Task<bool> RemoveAsync<T>(string key, T value);
 
         #endregion
+
+        #region database
+
+        #region 同步
+
+        /// <summary>
+        /// SortedSet 新增
+        /// </summary>
+        /// <param name="redisKey"></param>
+        /// <param name="member"></param>
+        /// <param name="score"></param>
+        /// <returns></returns>
+        bool Add<T>(int dataBase, string key, T value, double score);
+
+        /// <summary>
+        /// 获取SortedSet的数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        T Get<T>(int dataBase, string key, double score, Order order = Order.Ascending, long skip = 0, long take = -1);
+
+        /// <summary>
+        /// 获取集合中的数量
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        long Length(int dataBase, string key);
+
+        /// <summary>
+        /// 移除SortedSet
+        /// </summary>
+        bool Remove<T>(int dataBase, string key, T value);
+
+        #endregion
+
+        #region 异步
+
+        /// <summary>
+        /// SortedSet 新增
+        /// </summary>
+        /// <param name="redisKey"></param>
+        /// <param name="member"></param>
+        /// <param name="score"></param>
+        /// <returns></returns>
+        Task<bool> AddAsync<T>(int dataBase, string key, T value, double score);
+
+        /// <summary>
+        /// 获取SortedSet的数据
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        Task<T> GetAsync<T>(int dataBase, string key, double score, Order order = Order.Ascending, long skip = 0, long take = -1);
+        /// <summary>
+        /// 获取集合中的数量
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        Task<long> LengthAsync(int dataBase, string key);
+
+        /// <summary>
+        /// 移除SortedSet
+        /// </summary>
+        Task<bool> RemoveAsync<T>(int dataBase, string key, T value);
+
+        #endregion
+
+        #endregion
     }
 }

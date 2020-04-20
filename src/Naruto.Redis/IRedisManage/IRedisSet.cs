@@ -104,6 +104,102 @@ namespace Naruto.Redis.IRedisManage
         Task<bool> RemoveAsync(string key, string value);
 
         #endregion
+
+        #region dataBase
+
+        #region 同步
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        bool Add<T>(int dataBase, string value);
+
+        /// <summary>
+        /// 移除
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        bool Remove<T>(int dataBase, string value);
+
+        /// <summary>
+        /// 取值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        string[] Get<T>(int dataBase);
+
+        /// <summary>
+        /// 取值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        string[] Get(int dataBase, string key);
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        bool Add(int dataBase, string key, string value);
+
+        /// <summary>
+        /// 移除
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        void Remove(int dataBase, string key, string value);
+
+        #endregion
+
+        #region 异步
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        Task<bool> AddAsync<T>(int dataBase, string value);
+
+        /// <summary>
+        /// 移除
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        Task<bool> RemoveAsync<T>(int dataBase, string value);
+
+        /// <summary>
+        /// 取值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        Task<string[]> GetAsync<T>(int dataBase);
+
+        /// <summary>
+        /// 取值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        Task<string[]> GetAsync(int dataBase, string key);
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        Task<bool> AddAsync(int dataBase, string key, string value);
+
+        /// <summary>
+        /// 移除
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        Task<bool> RemoveAsync(int dataBase, string key, string value);
+
+        #endregion
+
+        #endregion
     }
 
 }
