@@ -49,8 +49,8 @@ namespace Naruto.XUnitTest
 
             services.AddEFOption(options =>
             {
-                options.ConfigureDbContext = context => context.UseMySql("Database=test;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hks360;Charset=utf8;").AddInterceptors(new EFDbCommandInterceptor());
-                options.ReadOnlyConnectionString = new string[] { "Database=test1;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hks360;Charset=utf8;" };
+                options.ConfigureDbContext = context => context.UseMySql("Database=test;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hai123;Charset=utf8;").AddInterceptors(new EFDbCommandInterceptor());
+                options.ReadOnlyConnectionString = new string[] { "Database=test1;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hai123;Charset=utf8;" };
                 //
                 options.UseEntityFramework<MysqlDbContent, SlaveMysqlDbContent>(true, 100);
                 options.IsOpenMasterSlave = true;
