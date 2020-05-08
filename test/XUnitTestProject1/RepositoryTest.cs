@@ -21,6 +21,9 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Naruto.Repository.Object;
+using Naruto.Repository.ExpressionTree;
+using XUnitTestProject1;
+using System.Linq.Expressions;
 #if NETCOREAPP
 using Naruto.Repository.Interceptor;
 using MySql.Data.MySqlClient;
@@ -46,8 +49,8 @@ namespace Naruto.XUnitTest
 
             services.AddEFOption(options =>
             {
-                options.ConfigureDbContext = context => context.UseMySql("Database=test;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hai123;Charset=utf8;").AddInterceptors(new EFDbCommandInterceptor());
-                options.ReadOnlyConnectionString = new string[] { "Database=test1;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hai123;Charset=utf8;" };
+                options.ConfigureDbContext = context => context.UseMySql("Database=test;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hks360;Charset=utf8;").AddInterceptors(new EFDbCommandInterceptor());
+                options.ReadOnlyConnectionString = new string[] { "Database=test1;DataSource=127.0.0.1;Port=3306;UserId=root;Password=hks360;Charset=utf8;" };
                 //
                 options.UseEntityFramework<MysqlDbContent, SlaveMysqlDbContent>(true, 100);
                 options.IsOpenMasterSlave = true;
@@ -365,10 +368,11 @@ namespace Naruto.XUnitTest
             using (var scope = services.BuildServiceProvider().CreateScope())
             {
                 var mysqlDbContent = scope.ServiceProvider.GetRequiredService<MysqlDbContent>();
-                if (mysqlDbContent.Model.FindEntityType(typeof(setting)) is IConventionEntityType conventionEntityType)
-                {
-                    conventionEntityType.SetTableName("setting_2019");
-                }
+                //if (mysqlDbContent.Model.FindEntityType(typeof(setting)) is IConventionEntityType conventionEntityType)
+                //{
+                //    conventionEntityType.SetTableName("setting_2019");
+                //}
+                var ss = ExpressionToSql<setting>.ToSql(mysqlDbContent.setting.AsQueryable());
                 var tss = mysqlDbContent.setting.AsQueryable().ToSqlWithParams();
             }
         }

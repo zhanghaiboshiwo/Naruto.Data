@@ -1,7 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Query;
+﻿using ExpressionTreeToString;
+using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+using Microsoft.EntityFrameworkCore.Storage;
+using Naruto.Domain.Model.Entities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -16,7 +20,10 @@ namespace XUnitTestProject1
     /// <typeparam name="TEntity"></typeparam>
     internal static class ExpressionToSql<TEntity>
     {
-        private static Action<string, IReadOnlyDictionary<string, object>> cache;
+        //sql缓存
+        private static Func<IQueryable, string> sqlCache;
+        //参数缓存
+        private static Func<IQueryable, IReadOnlyDictionary<string, object>> parameterCache;
 
         private const BindingFlags bindingFlags = BindingFlags.NonPublic | BindingFlags.Instance;
 
@@ -25,16 +32,17 @@ namespace XUnitTestProject1
 
         }
 
-        public static (string, string, IReadOnlyDictionary<string, object>) ToSql(IQueryable<TEntity> query)
+        public static (string, string, IReadOnlyDictionary<string, object>) ToSql(IQueryable query)
         {
             IQueryProvider queryProvider = query.Provider;
             var enumerator = queryProvider
                              .Execute<IEnumerable<TEntity>>(query.Expression)
                              .GetEnumerator();
-            //定义一个输入queryable参数
-            var queryableParameter = Expression.Parameter(typeof(IQueryable<TEntity>));
 
-            var enumeratorExpression = Expression.Call(
+            //定义一个输入queryable参数
+            var queryableParameter = Expression.Parameter(typeof(IQueryable), "query");
+
+            var enumeratorExpression =Expression.Call(
                 Expression.Call(
                     Expression.Property(queryableParameter, "Provider"), "Execute", new Type[] {
                 typeof(IEnumerable<TEntity>)
@@ -43,57 +51,80 @@ namespace XUnitTestProject1
             }),
                 typeof(IEnumerable<TEntity>).GetMethod("GetEnumerator"));
 
+            //Type enumeratorType = enumerator.GetType();
 
-            Type enumeratorType = enumerator.GetType();
+            var enumeratorTypeExpression = Expression.Constant(enumerator.GetType());
+            //var enumeratorTypeExpression = Expression.Call(enumeratorExpression, "GetType", null);
 
-            FieldInfo relationalCommandCacheFieldInfo = enumeratorType.GetField("_relationalCommandCache", bindingFlags)
-                ?? throw new InvalidOperationException(
-                    $"cannot find field _relationalCommandCache on type {enumeratorType.Name}");
-            Type relationalCommandCacheType = relationalCommandCacheFieldInfo.FieldType;
+            var relationalCommandCacheFieldInfoExpression = Expression.Call(enumeratorTypeExpression, "GetField", null, new Expression[] {
+                Expression.Constant("_relationalCommandCache"),
+                Expression.Constant(bindingFlags)
+            });
+            var relationalCommandCacheTypeExpression = Expression.Property(relationalCommandCacheFieldInfoExpression, "FieldType");
 
             //获取查询表达式
-            var selectFieldInfo = relationalCommandCacheType.GetField("_selectExpression", bindingFlags)
-                ?? throw new InvalidOperationException(
-                    $"cannot find field _selectExpression on type {relationalCommandCacheType.Name}");
-            var sqlGeneratorFieldInfo = relationalCommandCacheType.GetField("_querySqlGeneratorFactory", bindingFlags)
-                ?? throw new InvalidOperationException(
-                    $"cannot find field _querySqlGeneratorFactory on type {relationalCommandCacheType.Name}");
-            var queryContextFieldInfo = enumeratorType.GetField("_relationalQueryContext", bindingFlags)
-                ?? throw new InvalidOperationException(
-                    $"cannot find field _relationalQueryContext on type {enumeratorType.Name}");
 
-            object relationalCommandCache = relationalCommandCacheFieldInfo.GetValue(enumerator);
+            var selectFieldInfoExpression = Expression.Call(relationalCommandCacheTypeExpression, "GetField", null, new Expression[] {
+                 Expression.Constant("_selectExpression"),
+                Expression.Constant(bindingFlags)
+            });
 
-            var selectExpression = selectFieldInfo.GetValue(relationalCommandCache) as SelectExpression
-                ?? throw new InvalidOperationException($"could not get SelectExpression");
+            var sqlGeneratorFieldInfoExpression = Expression.Call(relationalCommandCacheTypeExpression, "GetField", null, new Expression[] {
+                 Expression.Constant("_querySqlGeneratorFactory"),
+                Expression.Constant(bindingFlags)
+            });
 
-            var queryContext = queryContextFieldInfo.GetValue(enumerator) as RelationalQueryContext
-                ?? throw new InvalidOperationException($"could not get RelationalQueryContext");
+            var queryContextFieldInfoExpression = Expression.Call(enumeratorTypeExpression, "GetField", null, new Expression[] {
+                 Expression.Constant("_relationalQueryContext"),
+                Expression.Constant(bindingFlags)
+            });
 
-            IQuerySqlGeneratorFactory factory = sqlGeneratorFieldInfo.GetValue(relationalCommandCache)
-                as IQuerySqlGeneratorFactory
-                ?? throw new InvalidOperationException($"could not get IQuerySqlGeneratorFactory");
+            var relationalCommandCacheExpression = Expression.Call(relationalCommandCacheFieldInfoExpression, "GetValue", null, new Expression[] {
+                enumeratorExpression
+            });
 
+            var selectExpressionExpression = Expression.Call(selectFieldInfoExpression, "GetValue", null, new Expression[] {
+                relationalCommandCacheExpression
+            });
+
+            var queryContextExpression = Expression.Convert(Expression.Call(queryContextFieldInfoExpression, "GetValue", null, new Expression[] {
+                enumeratorExpression
+            }), typeof(RelationalQueryContext));
+
+
+            var factoryExpression = Expression.Convert(Expression.Call(sqlGeneratorFieldInfoExpression, "GetValue", null, new Expression[] {
+                relationalCommandCacheExpression
+            }), typeof(IQuerySqlGeneratorFactory));
 
             //创建一个查询的对象
-            var sqlGenerator = factory.Create();
-            //获取执行的命令
-            var command = sqlGenerator.GetCommand(selectExpression);
-            //执行sql传递的参数
-            var parametersDict = queryContext.ParameterValues;
-            //原始的sql执行文本
-            var sql = command.CommandText;
-            //将参数赋值转换
-            var converSql = sql;
+            var sqlGeneratorExpression = Expression.Convert(Expression.Call(factoryExpression, typeof(IQuerySqlGeneratorFactory).GetMethod("Create")), typeof(QuerySqlGenerator));
 
-            if (parametersDict != null && parametersDict.Count() > 0)
-            {
-                foreach (var item in parametersDict)
-                {
-                    converSql = converSql.Replace($"@{item.Key}", $"'{item.Value.ToString()}'");
-                }
-            }
-            return (converSql, sql, parametersDict);
+            //获取执行的命令
+            var commandExpression = Expression.Convert(Expression.Call(sqlGeneratorExpression, typeof(QuerySqlGenerator).GetMethod("GetCommand"), Expression.Convert(selectExpressionExpression, typeof(SelectExpression))), typeof(IRelationalCommand));
+
+
+            //执行sql传递的参数
+            var parametersDictExpression = Expression.Property(queryContextExpression, "ParameterValues");
+
+            //原始的sql执行文本
+            var sqlExpression = Expression.Property(commandExpression, "CommandText");
+            ////将参数赋值转换
+            //var converSql = sql;
+
+
+            //if (parametersDict != null && parametersDict.Count() > 0)
+            //{
+            //    foreach (var item in parametersDict)
+            //    {
+            //        converSql = converSql.Replace($"@{item.Key}", $"'{item.Value.ToString()}'");
+            //    }
+            //}
+
+            var sqlLambda = Expression.Lambda<Func<IQueryable, string>>(sqlExpression, queryableParameter);
+            var parametersDictLambda = Expression.Lambda<Func<IQueryable, IReadOnlyDictionary<string, object>>>(parametersDictExpression, queryableParameter);
+            sqlCache = sqlLambda.Compile();
+            parameterCache = parametersDictLambda.Compile();
+            return ("", sqlCache(query), parameterCache(query));
         }
     }
 
@@ -103,7 +134,6 @@ namespace XUnitTestProject1
         [Fact]
         public void test()
         {
-
         }
     }
 }
