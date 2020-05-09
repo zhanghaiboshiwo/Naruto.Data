@@ -24,6 +24,7 @@ using Naruto.Repository.Object;
 using Naruto.Repository.ExpressionTree;
 using XUnitTestProject1;
 using System.Linq.Expressions;
+using Xunit.Abstractions;
 #if NETCOREAPP
 using Naruto.Repository.Interceptor;
 using MySql.Data.MySqlClient;
@@ -41,9 +42,11 @@ namespace Naruto.XUnitTest
 
         private DbContext dbContex;
 
-        public RepositoryTest()
-        {
+        private readonly ITestOutputHelper _output;
 
+        public RepositoryTest(ITestOutputHelper output)
+        {
+            _output = output;
 
             services.AddRepository();
 
@@ -239,7 +242,7 @@ namespace Naruto.XUnitTest
             using (var servicesScope = services.BuildServiceProvider().CreateScope())
             {
                 var unit = servicesScope.ServiceProvider.GetRequiredService<IUnitOfWork<MysqlDbContent>>();
-                var sql = unit.Query<setting>().AsQueryable().Where(a => a.Contact.Contains("asdsa")).ToSqlWithParams();
+                var sql = ExpressionToSql<setting>.ToSqlWithParams(unit.Query<setting>().AsQueryable().Where(a => a.Contact.Contains("asdsa")));
             }
         }
 
@@ -372,8 +375,19 @@ namespace Naruto.XUnitTest
                 //{
                 //    conventionEntityType.SetTableName("setting_2019");
                 //}
-                var ss = ExpressionToSql<setting>.ToSql(mysqlDbContent.setting.AsQueryable());
-                var tss = mysqlDbContent.setting.AsQueryable().ToSqlWithParams();
+                var b = 1;
+                var queryable = mysqlDbContent.setting.AsQueryable().Where(a => a.Id == b);
+                Stopwatch stopwatch = Stopwatch.StartNew();
+                {
+                    for (int i = 0; i < 10000; i++)
+                    {
+                        var ss = ExpressionToSql<setting>.ToSqlWithParams(queryable);
+                    }
+                    var ss2 = ExpressionToSql<test1>.ToSqlWithParams(mysqlDbContent.test1.AsQueryable());
+                    stopwatch.Stop();
+                    _output.WriteLine("ToSql:" + stopwatch.ElapsedMilliseconds);
+                    //Console.WriteLine("ToSql:" + stopwatch.ElapsedMilliseconds);
+                }
             }
         }
     }
