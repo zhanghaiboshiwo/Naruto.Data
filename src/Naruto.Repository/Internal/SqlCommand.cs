@@ -42,9 +42,9 @@ namespace Naruto.Repository.Internal
         /// <param name="sql"></param>
         /// <param name="_params"></param>
         /// <returns></returns>
-        public int ExecuteNonQuery(string sql, object[] _params = default)
+        public int ExecuteNonQuery(string sql, object[] _params = default, CommandType commandType = CommandType.Text)
         {
-            return ExecuteNonQueryAsync(sql, _params).ConfigureAwait(false).GetAwaiter().GetResult();
+            return ExecuteNonQueryAsync(sql, _params, commandType).ConfigureAwait(false).GetAwaiter().GetResult();
         }
         /// <summary>
         /// 执行sql返回第一行第一列
@@ -58,7 +58,7 @@ namespace Naruto.Repository.Internal
             return ExecuteScalarAsync<T>(sql, _params).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
-        public async Task<int> ExecuteNonQueryAsync(string sql, object[] _params = default, CancellationToken cancellationToken = default)
+        public async Task<int> ExecuteNonQueryAsync(string sql, object[] _params = default, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default)
         {
             cancellationToken.ThrowIfCancellationRequested();
             CheckSql(sql);
@@ -120,10 +120,11 @@ namespace Naruto.Repository.Internal
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="_params"></param>
-        private TResult ExecCommand<TResult>(DbConnection dbConnection, Func<DbCommand, TResult> func, string sql, object[] _params)
+        private TResult ExecCommand<TResult>(DbConnection dbConnection, Func<DbCommand, TResult> func, string sql, object[] _params, CommandType commandType = CommandType.Text)
         {
             //创建一个命令
             var command = dbConnection.CreateCommand();
+            command.CommandType = commandType;
             command.CommandText = sql;
             if (_params != null && _params.Count() > 0)
                 command.Parameters.AddRange(_params);

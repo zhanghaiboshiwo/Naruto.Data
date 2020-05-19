@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,14 +13,14 @@ namespace Naruto.Repository.Interface
         /// <param name="sql"></param>
         /// <param name="_params"></param>
         /// <returns></returns>
-        Task<int> ExecuteNonQueryAsync(string sql,  object[] _params=default, CancellationToken cancellationToken = default);
+        Task<int> ExecuteNonQueryAsync(string sql, object[] _params = default, CommandType commandType = CommandType.Text, CancellationToken cancellationToken = default);
         /// <summary>
         /// 执行增删改的操作 返回受影响的行数
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="_params"></param>
         /// <returns></returns>
-        int ExecuteNonQuery(string sql,  object[] _params = default);
+        int ExecuteNonQuery(string sql, object[] _params = default, CommandType commandType = CommandType.Text);
     }
     /// <summary>
     /// 张海波
