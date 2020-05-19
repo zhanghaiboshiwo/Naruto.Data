@@ -65,7 +65,7 @@ namespace Naruto.Repository.Internal
             //获取连接
             var connection = await GetConnection(cancellationToken);
             //执行命令
-            return await ExecCommand(connection, async command => await command.ExecuteNonQueryAsync(cancellationToken), sql, _params).ConfigureAwait(false);
+            return await ExecCommand(connection, async command => await command.ExecuteNonQueryAsync(cancellationToken), sql, _params, commandType).ConfigureAwait(false);
         }
         /// <summary>
         /// 执行sql返回第一行第一列
