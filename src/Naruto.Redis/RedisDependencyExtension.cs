@@ -1,6 +1,6 @@
 ﻿
 using System;
-using Naruto.Redis.RedisConfig;
+using Naruto.Redis.Config;
 using System.Reflection;
 using System.Linq;
 using Microsoft.Extensions.Configuration;

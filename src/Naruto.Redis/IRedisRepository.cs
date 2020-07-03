@@ -1,5 +1,5 @@
 ﻿
-using Naruto.Redis.IRedisManage;
+using Naruto.Redis.Interface;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;

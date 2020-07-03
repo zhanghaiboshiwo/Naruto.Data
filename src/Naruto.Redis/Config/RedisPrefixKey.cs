@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Naruto.Redis.RedisConfig
+namespace Naruto.Redis.Config
 {
     /// <summary>
     /// redis的key的前缀

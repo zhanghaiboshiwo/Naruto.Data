@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
-using Naruto.Redis.IRedisManage;
-using Naruto.Redis.RedisConfig;
+using Naruto.Redis.Interface;
+using Naruto.Redis.Config;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Naruto.Redis.RedisManage
+namespace Naruto.Redis.Internal
 {
     /// <summary>
     /// 

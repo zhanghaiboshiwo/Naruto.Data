@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using Naruto.Redis;
-using Naruto.Redis.IRedisManage;
+using Naruto.Redis.Interface;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using Naruto.Domain.Model.Entities;
 using System.Linq;
 using System.IO;
 using System.Threading;
+using Naruto.Redis.Config;
 
 namespace Naruto.XUnitTest
 {
@@ -26,7 +27,7 @@ namespace Naruto.XUnitTest
             services.AddRedisRepository(options =>
             {
                 options.Connection = new string[] { "127.0.0.1:6379" };
-                options.RedisPrefix = new Redis.RedisConfig.RedisPrefixKey();
+                options.RedisPrefix = new RedisPrefixKey();
             });
             redis = services.BuildServiceProvider().GetService<IRedisRepository>();
         }

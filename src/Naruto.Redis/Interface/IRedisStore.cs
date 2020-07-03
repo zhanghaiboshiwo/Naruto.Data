@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Naruto.Redis.IRedisManage
+namespace Naruto.Redis.Interface
 {
     /// <summary>
     /// 张海波

@@ -1,10 +1,10 @@
-﻿using Naruto.Redis.IRedisManage;
+﻿using Naruto.Redis.Interface;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Naruto.Redis.RedisConfig
+namespace Naruto.Redis.Config
 {
     /// <summary>
     /// redis的连接配置

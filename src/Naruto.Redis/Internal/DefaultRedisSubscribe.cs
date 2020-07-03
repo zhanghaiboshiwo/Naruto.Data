@@ -1,11 +1,11 @@
-﻿using Naruto.Redis.IRedisManage;
+﻿using Naruto.Redis.Interface;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Naruto.Redis.RedisManage
+namespace Naruto.Redis.Internal
 {
     public class DefaultRedisSubscribe : IRedisSubscribe
     {

@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.Text;
 using StackExchange.Redis;
 using System.Linq;
-using Naruto.Redis.RedisManage;
-using Naruto.Redis.IRedisManage;
+using Naruto.Redis.Internal;
+using Naruto.Redis.Interface;
 using Microsoft.Extensions.Options;
 
-namespace Naruto.Redis.RedisConfig
+namespace Naruto.Redis.Config
 {
     /// <summary>
     /// 张海波

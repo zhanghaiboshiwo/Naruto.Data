@@ -1,11 +1,11 @@
-﻿using Naruto.Redis.IRedisManage;
-using Naruto.Redis.RedisConfig;
+﻿using Naruto.Redis.Interface;
+using Naruto.Redis.Config;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Naruto.Redis.RedisManage
+namespace Naruto.Redis.Internal
 {
     /// <summary>
     /// 

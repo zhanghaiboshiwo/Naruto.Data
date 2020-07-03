@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Naruto.Redis.IRedisManage;
+using Naruto.Redis.Interface;
 using Microsoft.Extensions.DependencyInjection;
 
 

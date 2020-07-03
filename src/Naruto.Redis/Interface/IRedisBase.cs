@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Naruto.Redis.IRedisManage
+namespace Naruto.Redis.Interface
 {
     /// <summary>
     /// 缓存的基类 

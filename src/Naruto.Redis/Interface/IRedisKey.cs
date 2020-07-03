@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Naruto.Redis.IRedisManage
+namespace Naruto.Redis.Interface
 {
     /// <summary>
     /// key的操作

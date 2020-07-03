@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Naruto.Redis.IRedisManage
+namespace Naruto.Redis.Interface
 {
     /// <summary>
     /// 张海波

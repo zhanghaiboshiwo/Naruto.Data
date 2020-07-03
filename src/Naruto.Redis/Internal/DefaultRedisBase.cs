@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net;
-using Naruto.Redis.RedisConfig;
+using Naruto.Redis.Config;
+using Naruto.Redis.Interface;
 
-namespace Naruto.Redis.RedisManage
+namespace Naruto.Redis.Internal
 {
     /// <summary>
     /// 张海波
     /// 2019.08.13
     /// redis 访问的基类
     /// </summary>
-    public class DefaultRedisBase : IRedisManage.IRedisBase
+    public class DefaultRedisBase : IRedisBase
     {
         private IRedisConnectionHelp redisConnectionHelp;
         public DefaultRedisBase(IRedisConnectionHelp _redisConnectionHelp)
