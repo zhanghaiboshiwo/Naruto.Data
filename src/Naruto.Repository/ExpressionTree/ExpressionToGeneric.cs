@@ -160,35 +160,35 @@ namespace Naruto.Repository.ExpressionTree
         /// <returns></returns>
         private static bool CheckType(Type type)
         {
-            if (type == typeof(int))
+            if (type == typeof(int) || type == typeof(int?))
                 return true;
             else if (type == typeof(string))
                 return true;
-            else if (type == typeof(long))
+            else if (type == typeof(long) || type == typeof(long?))
                 return true;
-            else if (type == typeof(float))
+            else if (type == typeof(float) || type == typeof(float?))
                 return true;
-            else if (type == typeof(double))
+            else if (type == typeof(double) || type == typeof(double?))
                 return true;
-            else if (type == typeof(decimal))
+            else if (type == typeof(decimal) || type == typeof(decimal?))
                 return true;
-            else if (type == typeof(DateTime))
+            else if (type == typeof(DateTime) || type == typeof(DateTime?))
                 return true;
-            else if (type == typeof(bool))
+            else if (type == typeof(bool) || type == typeof(bool?))
                 return true;
-            else if (type == typeof(short))
+            else if (type == typeof(short) || type == typeof(short?))
                 return true;
-            else if (type == typeof(byte))
+            else if (type == typeof(byte) || type == typeof(byte?))
                 return true;
             else if (type == typeof(byte[]))
                 return true;
-            else if (type == typeof(uint))
+            else if (type == typeof(uint) || type == typeof(uint?))
                 return true;
-            else if (type == typeof(ulong))
+            else if (type == typeof(ulong) || type == typeof(ulong?))
                 return true;
-            else if (type == typeof(char))
+            else if (type == typeof(char) || type == typeof(char?))
                 return true;
-            else if (type == typeof(Guid))
+            else if (type == typeof(Guid) || type == typeof(Guid?))
                 return true;
             else if (type == typeof(object))
                 return true;
