@@ -72,7 +72,7 @@ namespace Naruto.Repository.ExpressionTree
             foreach (var item in typeof(TOut).GetProperties())
             {
                 //验证属性是否为对象或者泛型，因为此类型，不属于数据库类型，所以过滤掉
-                if (!CheckType(item.PropertyType) && (item.PropertyType.IsClass || item.PropertyType.IsGenericType))
+                if (!CheckType(item.PropertyType) && (item.PropertyType.IsAutoClass || item.PropertyType.IsGenericType))
                 {
                     continue;
                 }
@@ -81,20 +81,32 @@ namespace Naruto.Repository.ExpressionTree
                         select,
                         Expression.Constant(item.Name)
                     });
-                //绑定属性
-                var memberBind = Expression.Bind(item,
-                    //条件表达式
-                    Expression.Condition(
-                     //匹配条件 验证当前输出的对象中的和dbreader中的对象是否满足一样的
-                     contains,
-                    //当为true的时候
-                    Expression.Convert(Expression.Call(typeof(DataReaderExtensions).GetMethod("GetValue"), new Expression[] {
+                //获取数据库返回值的类型
+                var getDbType = Expression.Call(Expression.Call(typeof(DataReaderExtensions).GetMethod("GetValue"), new Expression[] {
                     parameter,
                 Expression.Constant(item.Name)
-                }), item.PropertyType),
-                    //当为false的时候
-                    Expression.Default(item.PropertyType)
-                    ));
+                }), typeof(object).GetMethod("GetType"));
+
+                //验证当前值 比较是否为dbnull 如果是dbnull的话，就取默认值
+                var isDBNull = Expression.Condition(Expression.Equal(getDbType, Expression.Constant(typeof(DBNull))),
+                           Expression.Default(item.PropertyType),
+                        //当为true的时候
+                        Expression.Convert(Expression.Call(typeof(DataReaderExtensions).GetMethod("GetValue"), new Expression[] {
+                    parameter,
+                Expression.Constant(item.Name)
+                    }), item.PropertyType)
+                        );
+
+                //绑定属性
+                var memberBind = Expression.Bind(item,
+                     //条件表达式
+                     Expression.Condition(
+                      //匹配条件 验证当前输出的对象中的和dbreader中的对象是否满足一样的
+                      contains,
+                      isDBNull,
+                     //当为false的时候
+                     Expression.Default(item.PropertyType)
+                     ));
                 memberBinds.Add(memberBind);
             }
             //初始化对象信息
