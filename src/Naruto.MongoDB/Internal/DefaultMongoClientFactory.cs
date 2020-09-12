@@ -29,6 +29,12 @@ namespace Naruto.MongoDB.Internal
             serviceProvider = _serviceProvider;
             MongoClientPool = new ConcurrentDictionary<Type, Tuple<IMongoClient, MongoContext>>();
         }
+
+        public void Dispose()
+        {
+            MongoClientPool?.Clear();
+        }
+
         /// <summary>
         /// 获取客户端
         /// </summary>

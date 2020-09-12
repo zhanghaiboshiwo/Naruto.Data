@@ -12,7 +12,7 @@ namespace Naruto.MongoDB.Interface
     /// 2019-12-1
     /// mongo的连接实例工厂获取
     /// </summary>
-    public interface IMongoClientFactory
+    public interface IMongoClientFactory : IDisposable
     {
         /// <summary>
         /// 获取mongo 客户端
