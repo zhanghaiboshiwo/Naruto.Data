@@ -14,16 +14,20 @@ namespace Naruto.Redis.Interface
     public interface IRedisString : IRedisDependency
     {
         #region 同步
-
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        bool AddNotExists(string key, string value, TimeSpan? expiry = default);
         /// <summary>
         /// 保存字符串
         /// </summary>
-        void Add(string key, string value, TimeSpan? expiry = default);
+        bool Add(string key, string value, TimeSpan? expiry = default);
         /// <summary>
         /// 保存对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        void Add<T>(string key, T value, TimeSpan? expiry = default);
+        bool Add<T>(string key, T value, TimeSpan? expiry = default);
 
         /// <summary>
         /// 保存集合对象
@@ -58,7 +62,11 @@ namespace Naruto.Redis.Interface
         long Decrement(string key, long value = 1);
         #endregion
         #region 异步
-
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        Task<bool> AddNotExistsAsync(string key, string value, TimeSpan? expiry = default);
         /// <summary>
         /// 保存字符串
         /// </summary>
@@ -106,14 +114,23 @@ namespace Naruto.Redis.Interface
         #region 同步
 
         /// <summary>
+        /// 保存key
+        /// 当key不存在的时候
+        /// </summary>
+        /// <param name="dataBase"></param>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        /// <param name="expiry"></param>
+        bool AddNotExists(int dataBase, string key, string value, TimeSpan? expiry = default);
+        /// <summary>
         /// 保存字符串
         /// </summary>
-        void Add(int dataBase, string key, string value, TimeSpan? expiry = default);
+        bool Add(int dataBase, string key, string value, TimeSpan? expiry = default);
         /// <summary>
         /// 保存对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        void Add<T>(int dataBase, string key, T value, TimeSpan? expiry = default);
+        bool Add<T>(int dataBase, string key, T value, TimeSpan? expiry = default);
 
         /// <summary>
         /// 保存集合对象
@@ -148,7 +165,11 @@ namespace Naruto.Redis.Interface
         long Decrement(int dataBase, string key, long value = 1);
         #endregion
         #region 异步
-
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        Task<bool> AddNotExistsAsync(int dataBase, string key, string value, TimeSpan? expiry = default);
         /// <summary>
         /// 保存字符串
         /// </summary>
@@ -188,7 +209,7 @@ namespace Naruto.Redis.Interface
         /// <param name="key"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        Task<long> DecrementAsync(int dataBase,string key, long value = 1);
+        Task<long> DecrementAsync(int dataBase, string key, long value = 1);
         #endregion
 
         #endregion

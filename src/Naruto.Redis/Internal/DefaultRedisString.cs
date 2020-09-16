@@ -28,15 +28,21 @@ namespace Naruto.Redis.Internal
         }
 
         #region 同步
+
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        public bool AddNotExists(string key, string value, TimeSpan? expiry = default) => AddNotExists(redisBase.DefaultDataBase, key, value, expiry);
         /// <summary>
         /// 保存字符串
         /// </summary>
-        public void Add(string key, string value, TimeSpan? expiry = default) => Add(redisBase.DefaultDataBase, key, value, expiry);
+        public bool Add(string key, string value, TimeSpan? expiry = default) => Add(redisBase.DefaultDataBase, key, value, expiry);
         /// <summary>
         /// 保存对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void Add<T>(string key, T value, TimeSpan? expiry = default) => Add<T>(redisBase.DefaultDataBase, key, value, expiry);
+        public bool Add<T>(string key, T value, TimeSpan? expiry = default) => Add<T>(redisBase.DefaultDataBase, key, value, expiry);
 
         /// <summary>
         /// 保存集合对象
@@ -76,6 +82,11 @@ namespace Naruto.Redis.Internal
         #endregion
 
         #region 异步
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        public async Task<bool> AddNotExistsAsync(string key, string value, TimeSpan? expiry = default) => await AddNotExistsAsync(redisBase.DefaultDataBase,key, value, expiry);
         /// <summary>
         /// 保存字符串
         /// </summary>
@@ -127,19 +138,32 @@ namespace Naruto.Redis.Internal
         /// <summary>
         /// 保存字符串
         /// </summary>
-        public void Add(int dataBase, string key, string value, TimeSpan? expiry = default)
+        public bool Add(int dataBase, string key, string value, TimeSpan? expiry = default)
         {
             if (string.IsNullOrWhiteSpace(value))
             {
                 throw new ArgumentNullException(nameof(value));
             }
-            redisBase.DoSave(db => db.StringSet(redisPrefixKey.StringPrefixKey + key, value, expiry), dataBase);
+            return redisBase.DoSave(db => db.StringSet(redisPrefixKey.StringPrefixKey + key, value, expiry), dataBase);
+        }
+
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        public bool AddNotExists(int dataBase, string key, string value, TimeSpan? expiry = default)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            return redisBase.DoSave(db => db.StringSet(redisPrefixKey.StringPrefixKey + key, value, expiry, When.NotExists), dataBase);
         }
         /// <summary>
         /// 保存对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void Add<T>(int dataBase, string key, T value, TimeSpan? expiry = default)
+        public bool Add<T>(int dataBase, string key, T value, TimeSpan? expiry = default)
         {
             if (value == null)
             {
@@ -147,7 +171,7 @@ namespace Naruto.Redis.Internal
             }
             key = redisPrefixKey.StringPrefixKey + key;
             var res = redisBase.ConvertJson(value);
-            redisBase.DoSave(db => db.StringSet(key, res, expiry), dataBase);
+            return redisBase.DoSave(db => db.StringSet(key, res, expiry), dataBase);
         }
 
         /// <summary>
@@ -215,6 +239,20 @@ namespace Naruto.Redis.Internal
         #endregion
 
         #region 异步
+
+        /// <summary>
+        /// 保存字符串
+        /// 当key不存在的时候
+        /// </summary>
+        public async Task<bool> AddNotExistsAsync(int dataBase, string key, string value, TimeSpan? expiry = default)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            return await redisBase.DoSave(db => db.StringSetAsync(redisPrefixKey.StringPrefixKey + key, value, expiry, When.NotExists), dataBase);
+        }
+
         /// <summary>
         /// 保存字符串
         /// </summary>

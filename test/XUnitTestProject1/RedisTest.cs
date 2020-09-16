@@ -26,7 +26,7 @@ namespace Naruto.XUnitTest
             //注入redis仓储服务
             services.AddRedisRepository(options =>
             {
-                options.Connection = new string[] { "127.0.0.1:6379" };
+                options.Connection = new string[] { "" };
                 options.RedisPrefix = new RedisPrefixKey();
             });
             redis = services.BuildServiceProvider().GetService<IRedisRepository>();
@@ -114,7 +114,21 @@ namespace Naruto.XUnitTest
                 settings1.Enqueue(new setting() { Contact = "1", Description = "1", DuringTime = "1", Integral = 1, Rule = "1" });
             });
 
-            await redis.List.AddAsync<setting>(1,"test", settings1.ToList());
+            await redis.List.AddAsync<setting>(1, "test", settings1.ToList());
+        }
+
+
+        [Fact]
+        public async Task AddNotExists()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                await redis.String.AddNotExistsAsync(12, "testn", i.ToString(), TimeSpan.FromSeconds(180));
+                await redis.String.AddNotExistsAsync( "testn", i.ToString(), TimeSpan.FromSeconds(180));
+                 redis.String.AddNotExists("testna", i.ToString(), TimeSpan.FromSeconds(180));
+                redis.String.AddNotExists(12, "testna", i.ToString(), TimeSpan.FromSeconds(180));
+            }
+
         }
 
         [Fact]
@@ -135,8 +149,8 @@ namespace Naruto.XUnitTest
                 using (var servicesscope = services.BuildServiceProvider().CreateScope())
                 {
                     var redis = servicesscope.ServiceProvider.GetRequiredService<IRedisRepository>();
-                    await redis.String.AddAsync(1,"1", "1");
-                    await redis.String.GetAsync(1,"1");
+                    await redis.String.AddAsync(1, "1", "1");
+                    await redis.String.GetAsync(1, "1");
                 }
             }
 
@@ -145,7 +159,7 @@ namespace Naruto.XUnitTest
         [Fact]
         public void Store()
         {
-            redis.Store.Store(1,new setting() { Description = "1" });
+            redis.Store.Store(1, new setting() { Description = "1" });
             //List<setting> list = new List<setting>();
             //for (int i = 0; i < 100000; i++)
             //{
