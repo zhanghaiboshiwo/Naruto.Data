@@ -75,6 +75,8 @@ namespace Naruto.XUnitTest
             var scopeServices = services.BuildServiceProvider().CreateScope().ServiceProvider;
             var repository = scopeServices.GetService(typeof(IRepository<>).MakeGenericType(typeof(MysqlDbContent))) as IRepository;
             var unitOfWork = scopeServices.GetService(typeof(IUnitOfWork<>).MakeGenericType(typeof(MysqlDbContent))) as IUnitOfWork;
+
+            var unitOfWorkBatch = scopeServices.GetRequiredService<IUnitOfWorkBatch>();
             ConcurrentQueue<setting> settings1 = new ConcurrentQueue<setting>();
 
             Parallel.For(0, 100, (item) =>
@@ -82,7 +84,7 @@ namespace Naruto.XUnitTest
                 settings1.Enqueue(new setting() { Contact = "1", Description = "1", DuringTime = "1", Integral = 1, Rule = "1" });
             });
             await repository.Command<setting>().BulkAddAsync(settings1, cancellationToken.Token);
-            await unitOfWork.SaveChangeAsync(cancellationToken.Token);
+            await unitOfWorkBatch.SaveChangeAsync(cancellationToken.Token);
         }
         [Fact]
         public async Task Query()

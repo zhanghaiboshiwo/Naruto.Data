@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace Naruto.Repository.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IBaseUnitOfWork
     {
         /// <summary>
         /// 更改数据库
@@ -15,6 +15,10 @@ namespace Naruto.Repository.UnitOfWork
         /// <returns></returns>
         Task ChangeDataBaseAsync(string dataBase);
 
+    }
+
+    public interface IBaseUnitOfWork
+    {
         /// <summary>
         /// 提交更改
         /// </summary>
@@ -55,7 +59,6 @@ namespace Naruto.Repository.UnitOfWork
         /// 事务回滚
         /// </summary>
         Task RollBackTransactionAsync(CancellationToken cancellationToken = default);
-      
     }
 
 }
