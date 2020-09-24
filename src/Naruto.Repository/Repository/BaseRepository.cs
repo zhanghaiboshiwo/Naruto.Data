@@ -8,28 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using Naruto.Repository.Interface;
 using Microsoft.Extensions.Options;
 using Naruto.Repository.Object;
-using System.Collections.Generic;
-
-using Microsoft.Extensions.DependencyInjection;
-using System.Data;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Threading;
+using Naruto.Repository.UnitOfWork;
 
-namespace Naruto.Repository.UnitOfWork
+namespace Naruto.Repository
 {
     /// <summary>
     /// 张海波
     /// 2019.08.13
-    /// 工作单元的统一入口
+    /// 仓储的统一入口
     /// </summary>
-    public class UnitOfWork<TDbContext> : IUnitOfWork<TDbContext> where TDbContext : DbContext
+    public partial class BaseRepository<TDbContext> : IRepository<TDbContext>, IUnitOfWork<TDbContext> where TDbContext : DbContext
     {
         #region  paramater
 
         /// <summary>
         /// 工作单元参数
         /// </summary>
-        private UnitOfWorkOptions<TDbContext> unitOfWorkOptions;
+        private RepositoryOptions<TDbContext> unitOfWorkOptions;
 
 
         /// <summary>
@@ -50,7 +47,7 @@ namespace Naruto.Repository.UnitOfWork
         /// </summary>
         /// <param name="_options"></param>
         /// <param name="_service"></param>
-        public UnitOfWork(IServiceProvider _service, UnitOfWorkOptions<TDbContext> _unitOfWorkOptions, IDbContextFactory _repositoryFactory, IRepositoryMediator<TDbContext> _repositoryMediator, IEFOptionsFactory eFOptionsFactory)
+        public BaseRepository(IServiceProvider _service, RepositoryOptions<TDbContext> _unitOfWorkOptions, IDbContextFactory _repositoryFactory, IRepositoryMediator<TDbContext> _repositoryMediator, IEFOptionsFactory eFOptionsFactory)
         {
             unitOfWorkOptions = _unitOfWorkOptions;
             //获取上下文类型
@@ -68,6 +65,87 @@ namespace Naruto.Repository.UnitOfWork
 
             repositoryMediator = _repositoryMediator;
         }
+
+
+        #region EFCore仓储 
+
+        /// <summary>
+        /// 执行 查询的操作
+        /// </summary>
+        /// <param name="isMaster">是否访问主库</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IRepositoryQuery<T> Query<T>(bool isMaster = false) where T : class, IEntity => repositoryMediator.Query<T>(isMaster);
+        /// <summary>
+        /// 执行增删改的操作
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IRepositoryCommand<T> Command<T>() where T : class, IEntity => repositoryMediator.Command<T>();
+
+        #endregion
+
+        #region  ado操作
+
+        /// <summary>
+        /// 执行sql查询操作
+        /// </summary>
+        /// <param name="isMaster">是否在主库上执行</param>
+        /// <returns></returns>
+        public ISqlQuery SqlQuery(bool isMaster = false) => repositoryMediator.SqlQuery(isMaster);
+
+        /// <summary>
+        /// 执行sql增删改操作
+        /// </summary> 
+        /// <returns></returns>
+        public ISqlCommand SqlCommand() => repositoryMediator.SqlCommand();
+
+        #endregion
+
+
+        #region 超时时间设置
+
+        /// <summary>
+        /// 超时时间
+        /// </summary>
+        public int CommandTimeout
+        {
+            set
+            {
+                unitOfWorkOptions.CommandTimeout = value;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Dispose()
+        {
+            dbContextTransaction?.Dispose();
+            GC.SuppressFinalize(this);
+        }
+    }
+
+    public partial class BaseRepository<TDbContext>
+    {
+
+        #region 切换数据库
+
+        /// <summary>
+        /// 更改数据库的名字
+        /// </summary>
+        /// <returns></returns>
+        public Task ChangeDataBaseAsync(string dataBase)
+        {
+            if (unitOfWorkOptions.IsBeginTran)
+                throw new ApplicationException("无法在事务中更改数据库!");
+            unitOfWorkOptions.ChangeDataBaseName = dataBase;
+            return Task.CompletedTask;
+        }
+
+        #endregion
 
         #region 事务操作
 
@@ -122,79 +200,5 @@ namespace Naruto.Repository.UnitOfWork
 
         #endregion
 
-        #region EFCore仓储 
-
-        /// <summary>
-        /// 执行 查询的操作
-        /// </summary>
-        /// <param name="isMaster">是否访问主库</param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public IRepositoryQuery<T> Query<T>(bool isMaster = false) where T : class, IEntity => repositoryMediator.Query<T>(isMaster);
-        /// <summary>
-        /// 执行增删改的操作
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public IRepositoryCommand<T> Command<T>() where T : class, IEntity => repositoryMediator.Command<T>();
-
-        #endregion
-
-        #region  ado操作
-
-        /// <summary>
-        /// 执行sql查询操作
-        /// </summary>
-        /// <param name="isMaster">是否在主库上执行</param>
-        /// <returns></returns>
-        public ISqlQuery SqlQuery(bool isMaster = false) => repositoryMediator.SqlQuery(isMaster);
-
-        /// <summary>
-        /// 执行sql增删改操作
-        /// </summary> 
-        /// <returns></returns>
-        public ISqlCommand SqlCommand() => repositoryMediator.SqlCommand();
-
-        #endregion
-
-        #region 切换数据库
-
-        /// <summary>
-        /// 更改数据库的名字
-        /// </summary>
-        /// <returns></returns>
-        public Task ChangeDataBaseAsync(string dataBase)
-        {
-            if (unitOfWorkOptions.IsBeginTran)
-                throw new ApplicationException("无法在事务中更改数据库!");
-            unitOfWorkOptions.ChangeDataBaseName = dataBase;
-            return Task.CompletedTask;
-        }
-
-        #endregion
-
-        #region 超时时间设置
-
-        /// <summary>
-        /// 超时时间
-        /// </summary>
-        public int CommandTimeout
-        {
-            set
-            {
-                unitOfWorkOptions.CommandTimeout = value;
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// 释放资源
-        /// </summary>
-        public void Dispose()
-        {
-            dbContextTransaction?.Dispose();
-            GC.SuppressFinalize(this);
-        }
     }
 }

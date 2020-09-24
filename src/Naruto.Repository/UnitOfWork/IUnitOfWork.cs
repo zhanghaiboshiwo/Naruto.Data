@@ -10,9 +10,11 @@ namespace Naruto.Repository.UnitOfWork
     public interface IUnitOfWork
     {
         /// <summary>
-        /// 超时时间
+        /// 更改数据库
         /// </summary>
-        int CommandTimeout { set; }
+        /// <returns></returns>
+        Task ChangeDataBaseAsync(string dataBase);
+
         /// <summary>
         /// 提交更改
         /// </summary>
@@ -53,38 +55,7 @@ namespace Naruto.Repository.UnitOfWork
         /// 事务回滚
         /// </summary>
         Task RollBackTransactionAsync(CancellationToken cancellationToken = default);
-        /// <summary>
-        /// 执行 查询的操作
-        /// </summary>
-        /// <param name="isMaster">是否访问主库</param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        IRepositoryQuery<T> Query<T>(bool isMaster = false) where T : class, IEntity;
-
-        /// <summary>
-        /// 执行增删改的操作
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        IRepositoryCommand<T> Command<T>() where T : class, IEntity;
-
-        /// <summary>
-        /// 更改数据库
-        /// </summary>
-        /// <returns></returns>
-        Task ChangeDataBaseAsync(string dataBase);
-
-        /// <summary>
-        /// 返回sql查询的对象
-        /// </summary>
-        /// <param name="isMaster">是否在主库上执行</param>
-        /// <returns></returns>
-        ISqlQuery SqlQuery(bool isMaster = false);
-        /// <summary>
-        /// 返回sql增删改的对象
-        /// </summary>
-        /// <returns></returns>
-        ISqlCommand SqlCommand();
+      
     }
 
 }

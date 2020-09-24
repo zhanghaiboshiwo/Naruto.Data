@@ -6,9 +6,9 @@ namespace Naruto.Repository.Object
     /// <summary>
     /// 张海波
     /// 2019.08.13
-    /// 工作单元的参数
+    /// 仓储的执行参数配置
     /// </summary>
-    public abstract class UnitOfWorkOptions
+    public abstract class RepositoryOptions
     {
         /// <summary>
         /// master 库的连接字符串
@@ -46,9 +46,9 @@ namespace Naruto.Repository.Object
     /// <summary>
     /// 张海波
     /// 2020-02-20
-    /// 工作单元的参数
+    /// 仓储的参数配置
     /// </summary>
-    public class UnitOfWorkOptions<TDbContext>: UnitOfWorkOptions where TDbContext : DbContext
+    public class RepositoryOptions<TDbContext> : RepositoryOptions where TDbContext : DbContext
     {
     }
 }

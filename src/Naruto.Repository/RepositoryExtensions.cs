@@ -54,7 +54,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 });
             }
             services.TryAddSingleton<ISlaveDbConnectionFactory, DefaultSlaveDbConnectionFactory>();
-            services.TryAddScoped(typeof(UnitOfWorkOptions<>));
+            services.TryAddScoped(typeof(RepositoryOptions<>));
             services.TryAddSingleton<IEFOptionsFactory, EFOptionsFactory>();
             return services;
         }

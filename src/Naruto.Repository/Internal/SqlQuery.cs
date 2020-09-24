@@ -24,7 +24,7 @@ namespace Naruto.Repository.Internal
         /// <summary>
         /// 构造获取上下文工厂
         /// </summary>
-        public SqlQuery(IRepositoryReadInfrastructure<TDbContext> _infrastructure, UnitOfWorkOptions<TDbContext> _unitOfWorkOptions) : base(_infrastructure, _unitOfWorkOptions)
+        public SqlQuery(IRepositoryReadInfrastructure<TDbContext> _infrastructure, RepositoryOptions<TDbContext> _unitOfWorkOptions) : base(_infrastructure, _unitOfWorkOptions)
         {
         }
     }
@@ -39,7 +39,7 @@ namespace Naruto.Repository.Internal
         /// <summary>
         /// 构造获取上下文工厂
         /// </summary>
-        public SqlMasterQuery(IRepositoryWriteInfrastructure<TDbContext> _infrastructure, UnitOfWorkOptions<TDbContext> _unitOfWorkOptions) : base(_infrastructure, _unitOfWorkOptions)
+        public SqlMasterQuery(IRepositoryWriteInfrastructure<TDbContext> _infrastructure, RepositoryOptions<TDbContext> _unitOfWorkOptions) : base(_infrastructure, _unitOfWorkOptions)
         {
         }
     }
@@ -60,13 +60,13 @@ namespace Naruto.Repository.Internal
         /// <summary>
         /// 工作单元参数设置
         /// </summary>
-        private readonly UnitOfWorkOptions unitOfWorkOptions;
+        private readonly RepositoryOptions unitOfWorkOptions;
 
 
         /// <summary>
         /// 构造获取上下文工厂
         /// </summary>
-        public SqlQueryAbstract(IRepositoryInfrastructure _infrastructure, UnitOfWorkOptions _unitOfWorkOptions)
+        public SqlQueryAbstract(IRepositoryInfrastructure _infrastructure, RepositoryOptions _unitOfWorkOptions)
         {
             infrastructure = _infrastructure;
             unitOfWorkOptions = _unitOfWorkOptions;

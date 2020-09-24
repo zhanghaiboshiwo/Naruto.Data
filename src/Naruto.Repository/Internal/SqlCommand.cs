@@ -27,11 +27,11 @@ namespace Naruto.Repository.Internal
         /// <summary>
         /// 工作单元参数设置
         /// </summary>
-        private readonly UnitOfWorkOptions<TDbContext> unitOfWorkOptions;
+        private readonly RepositoryOptions<TDbContext> unitOfWorkOptions;
         /// <summary>
         /// 构造获取上下文工厂
         /// </summary>
-        public SqlCommand(IRepositoryWriteInfrastructure<TDbContext> _infrastructure, UnitOfWorkOptions<TDbContext> _unitOfWorkOptions)
+        public SqlCommand(IRepositoryWriteInfrastructure<TDbContext> _infrastructure, RepositoryOptions<TDbContext> _unitOfWorkOptions)
         {
             infrastructure = _infrastructure;
             unitOfWorkOptions = _unitOfWorkOptions;

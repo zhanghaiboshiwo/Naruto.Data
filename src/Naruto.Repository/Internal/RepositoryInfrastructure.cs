@@ -32,11 +32,11 @@ namespace Naruto.Repository.Internal
         /// <summary>
         /// 工作单元参数
         /// </summary>
-        private readonly UnitOfWorkOptions<TDbContext> unitOfWorkOptions;
+        private readonly RepositoryOptions<TDbContext> unitOfWorkOptions;
 
         private readonly IServiceProvider serviceProvider;
 
-        public RepositoryWriteInfrastructure(IDbContextFactory _factory, IRepositoryInfrastructureBase<TDbContext> _infrastructureBase, UnitOfWorkOptions<TDbContext> _unitOfWorkOptions, IServiceProvider _serviceProvider)
+        public RepositoryWriteInfrastructure(IDbContextFactory _factory, IRepositoryInfrastructureBase<TDbContext> _infrastructureBase, RepositoryOptions<TDbContext> _unitOfWorkOptions, IServiceProvider _serviceProvider)
         {
             masterDbContext = _factory.GetMaster<TDbContext>();
             infrastructureBase = _infrastructureBase;
@@ -187,12 +187,12 @@ namespace Naruto.Repository.Internal
         //基础设施
         private readonly IRepositoryInfrastructureBase<TDbContext> infrastructureBase;
         //工作单元参数信息
-        private readonly UnitOfWorkOptions<TDbContext> unitOfWorkOptions;
+        private readonly RepositoryOptions<TDbContext> unitOfWorkOptions;
         /// <summary>
         /// 是否为主库的上下文
         /// </summary>
         private bool IsMaster = false;
-        public RepositoryReadInfrastructure(IDbContextFactory _factory, IRepositoryInfrastructureBase<TDbContext> _infrastructureBase, UnitOfWorkOptions<TDbContext> _unitOfWorkOptions)
+        public RepositoryReadInfrastructure(IDbContextFactory _factory, IRepositoryInfrastructureBase<TDbContext> _infrastructureBase, RepositoryOptions<TDbContext> _unitOfWorkOptions)
         {
             factory = _factory;
             infrastructureBase = _infrastructureBase;
@@ -277,14 +277,14 @@ namespace Naruto.Repository.Internal
         /// <summary>
         /// 工作单元参数
         /// </summary>
-        private readonly UnitOfWorkOptions<TDbContext> unitOfWorkOptions;
+        private readonly RepositoryOptions<TDbContext> unitOfWorkOptions;
 
         /// <summary>
         /// 参数信息
         /// </summary>
         private readonly EFOptions options;
 
-        public RepositoryInfrastructureBase(UnitOfWorkOptions<TDbContext> _unitOfWorkOptions, IEFOptionsFactory eFOptionsFactory)
+        public RepositoryInfrastructureBase(RepositoryOptions<TDbContext> _unitOfWorkOptions, IEFOptionsFactory eFOptionsFactory)
         {
             unitOfWorkOptions = _unitOfWorkOptions;
             options = eFOptionsFactory.Get<TDbContext>();
