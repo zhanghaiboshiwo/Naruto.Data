@@ -1,8 +1,9 @@
 ﻿## 接口对象说明
 >| 类 | 默认实现类 | 注释 |
 >| :-----:| :----: | :----: |
->| IUnitOfWork<> | UnitOfWork<> | <b>整个仓储的访问入口,可以从此获取对EFCore的操作和ADO的操作，单上下文的事务的操作</b> |
->| IUnitOfWorkTran | UnitOfWorkTran | 对于多工作单元模式的时候(多上下文模式)，可以批量的操作事务,此接口是对<b>IUnitOfWork<></b>接口的封装 |
+>| IRepository<> | BaseRepository<> | 仓储的基础实现，进行增删查改，sql操作 |
+>| IUnitOfWork<> | UnitOfWork<> | 对仓储的操作进行提交，事务操作 |
+>| IUnitOfWorkBatch | UnitOfWorkBatch | 对于多工作单元模式的时候(多上下文模式)，可以批量的操作事务，提交,此接口是对<b>IUnitOfWork<></b>接口的封装 |
 >| IDbContextFactory | DbContextFactory | 上下文工厂，获取所有注入的上下文的信息，并可以获取对应的主库和从库的上下文信息 |
 >| ISlaveDbConnectionFactory | DefaultSlaveDbConnectionFactory | 当前接口的作用为了实现在注入的时候，当开启主从模式的时候自动从从库中获取数据库的ip和port，以此来进行后台服务的心跳检查的操作 |
 >| IRepositoryCommand<,> | RepositoryCommand<,> |  仓储的增删改的 接口层 |
