@@ -10,10 +10,20 @@ namespace Naruto.Repository.UnitOfWork
     /// <summary>
     /// 张海波
     /// 2020-02-19
-    /// 当前接口 用于多工作单元时 批量操作事务
+    /// 当前接口 用于多工作单元时 批量操作事务 和 提交保存
     /// </summary>
-    public interface IUnitOfWorkTran : IRepositoryDependency
+    public interface IUnitOfWorkBatch : IRepositoryDependency
     {
+        /// <summary>
+        /// 提交更改
+        /// </summary>
+        /// <returns></returns>
+        int SaveChanges();
+        /// <summary>
+        /// 异步提交
+        /// </summary>
+        /// <returns></returns>
+        Task<int> SaveChangeAsync(CancellationToken cancellationToken = default);
         /// <summary>
         /// 开启事务
         /// </summary>
